@@ -1,17 +1,13 @@
-use std::ffi::c_void;
 use std::ops::{Deref, DerefMut};
 
-use crate::{
-	core::Ptr,
-	traits::Boxed,
-};
+use crate::{core::Ptr};
 
-impl Ptr<f32> {
-	pub fn new(val: f32) -> Self {
-		extern "C" { fn cv_PtrOff32_new(val: f32) -> *mut c_void; }
-		unsafe { Self::from_raw(cv_PtrOff32_new(val)) }
-	}
-}
+// impl Ptr<f32> {
+// 	pub fn new(val: f32) -> Self {
+// 		extern "C" { fn cv_PtrOff32_new(val: f32) -> *mut c_void; }
+// 		unsafe { Self::from_raw(cv_PtrOff32_new(val)) }
+// 	}
+// }
 
 impl Default for Ptr<f32> {
 	fn default() -> Self {

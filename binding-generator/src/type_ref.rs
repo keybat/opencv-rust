@@ -1725,6 +1725,14 @@ impl<'tu> TypeRef<'tu> {
 		self.cpp_extern_with_name(name).into_owned()
 	}
 
+	pub fn cpp_arg_func_decl_owned(&self, name: &str) -> String {
+		if self.is_by_ptr() {
+			let space_name = if name.is_empty() { "".to_string() } else { format!(" {}", name) };
+			return format!("{typ}*{name}", typ=self.cpp_full(), name=space_name);
+		}
+		self.cpp_extern_with_name(name).into_owned()
+	}
+
 	pub fn cpp_arg_pre_call(&self, name: &str) -> String {
 		if self.is_output() {
 			if self.is_std_string() {
@@ -1761,6 +1769,15 @@ impl<'tu> TypeRef<'tu> {
 		}
 		name
 	}
+
+	pub fn cpp_arg_func_call_owned<'a>(&self, name: impl Into<Cow<'a, str>>) -> Cow<'a, str> {
+		let name = name.into();
+		if self.is_primitive() {
+			return format!("new {typ}({name})", typ=self.cpp_full(), name=name).into();
+		}
+		name
+	}
+
 	pub fn cpp_extern_return(&self) -> Cow<str> {
 		if self.is_string() {
 			"void*".into()
